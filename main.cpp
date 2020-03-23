@@ -1,7 +1,7 @@
 #include <iostream>
 #include <math.h>
 
-#define THRESHOLD 1e-6
+#define THRESHOLD 1e-4
 #define PRECISION 1e-9
 
 
@@ -110,6 +110,7 @@ public:
 
     void mostrarResultado()
     {
+        cout << "DELTA: " << delta << endl << endl;
         cout << "f(x)  = (" << a << ")x^2 + (" << b << ")x + (" << c << ")\n" << endl;
         cout << "f'(x) = (" << derivada[1] << ")x + (" << derivada[0] << ")\n" << endl;
         if ( !raizesReais ) // sem raizes reais
@@ -230,6 +231,7 @@ public:
 
     void mostrarResultado()
     {
+        cout << "DELTA: " << delta << endl << endl;
         cout << "f(x)  = (" << a << ")x^3 + (" << b << ")x^2 + (" << c << ")x + (" << d << ")\n" << endl;
         cout << "f'(x) = (" << derivada[2] << ")x^2 + (" << derivada[1] << ")x + (" << derivada[0] << ")\n" << endl;
         cout << "RAIZES:" << endl << endl;
