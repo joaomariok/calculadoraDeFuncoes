@@ -1,6 +1,9 @@
 #include <iostream>
 #include <math.h>
 
+#define THRESHOLD 1e-6
+#define PRECISION 1e-9
+
 
 using namespace std;
 
@@ -28,7 +31,7 @@ public:
 
     void mostrarResultado()
     {
-        cout << "\nf(x) = (" << a << ")x + (" << b << ")\n" << endl;
+        cout << "f(x) = (" << a << ")x + (" << b << ")\n" << endl;
 
         if ( ehCrescente )
             cout << "FUNCAO CRESCENTE ( / )" << endl;
@@ -36,7 +39,7 @@ public:
             cout << "FUNCAO DECRESCENTE ( \\ )" << endl;
 
         cout << "INTERSECCAO COM X (y=0) : x = " << interseccaoX << endl;
-        cout << "INTERSECCAO COM Y (x=0) : y = " << interseccaoY << endl;
+        cout << "INTERSECCAO COM Y (x=0) : y = " << interseccaoY;
     }
 
 private:
@@ -77,10 +80,13 @@ public:
 
     void calcularRaizes()
     {
-        if (delta < 0)
+        if (delta < -THRESHOLD)
             raizesReais = false;
         else
         {
+            if (fabs(delta) < THRESHOLD)
+                delta = 0;
+
             raizesReais = true;
             raizes[0] = (-b + sqrt(delta))/(2*a);
             raizes[1] = (-b - sqrt(delta))/(2*a);
@@ -162,7 +168,7 @@ public:
     {
         double xAtual = 0;
         double xAnterior = -1;
-        while (fabs(xAtual - xAnterior) > 1e-6) {
+        while (fabs(xAtual - xAnterior) > PRECISION) {
             xAnterior = xAtual;
             xAtual = xAnterior - (a*pow(xAnterior,3) + b*pow(xAnterior,2) + c*xAnterior + d)/
                                     (derivada[2]*pow(xAnterior,2) + derivada[1]*xAnterior + derivada[0]);
@@ -180,7 +186,7 @@ public:
     {
         calcularPrimeiraRaiz();
 
-        if ( delta < 0 )
+        if ( delta < -THRESHOLD )
         {
             raizesReais = false;
             raizesIguais = false;
@@ -189,8 +195,9 @@ public:
         {
             briotRuffini();
 
-            if ( delta == 0 )
+            if ( fabs(delta) < THRESHOLD )
             {
+                delta = 0;
                 raizesReais = true;
                 raizesIguais = true;
             }
@@ -213,7 +220,7 @@ public:
         coefEqSegundoGrau[0] = raizes[0]*coefEqSegundoGrau[1] + coefEqTerceiroGrau[1];
         resto = raizes[0]*coefEqSegundoGrau[0] + coefEqTerceiroGrau[0];
 
-        if (fabs(resto) > 1e-8)
+        if (fabs(resto) > THRESHOLD)
             cout << "\n\nERRO!!! (sobrou resto) "<< resto <<"\n\n";
 
         FuncaoDeSegundoGrau funcaoAuxiliar(coefEqSegundoGrau[2], coefEqSegundoGrau[1], coefEqSegundoGrau[0]);
@@ -227,7 +234,9 @@ public:
         cout << "f'(x) = (" << derivada[2] << ")x^2 + (" << derivada[1] << ")x + (" << derivada[0] << ")\n" << endl;
         cout << "RAIZES:" << endl << endl;
         if (raizesReais)
+        {
             cout << "  x1 = " << raizes[0] << "\n  x2 = " << raizes[1] << "\n  x3 = " << raizes[2] << endl;
+        }
         else
             cout << "x = " << raizes[0] << " e mais 2 raizes nao reais" << endl;
     }
@@ -343,3 +352,4 @@ int main()
 
     return 0;
 }
+
